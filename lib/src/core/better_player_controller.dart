@@ -246,6 +246,7 @@ class BetterPlayerController {
     ///Build videoPlayerController if null
     if (videoPlayerController == null) {
       videoPlayerController = VideoPlayerController(
+          dataSource: betterPlayerDataSource,
           bufferingConfiguration:
               betterPlayerDataSource.bufferingConfiguration);
       videoPlayerController?.addListener(_onVideoPlayerChanged);
@@ -906,8 +907,8 @@ class BetterPlayerController {
           "mimeType": track.mimeType,
         }));
 
-    videoPlayerController!
-        .setTrackParameters(track.width, track.height, track.bitrate);
+    videoPlayerController!.setTrackParameters(track.width, track.height,
+        track.bitrate, track.id != null ? int.tryParse(track.id!) : null);
     _betterPlayerAsmsTrack = track;
   }
 

@@ -5,6 +5,7 @@
 // Dart imports:
 import 'dart:async';
 import 'dart:io';
+import 'package:better_player/better_player.dart';
 import 'package:better_player/src/configuration/better_player_buffering_configuration.dart';
 import 'package:better_player/src/video_player/video_player_platform_interface.dart';
 import 'package:flutter/foundation.dart';
@@ -171,9 +172,11 @@ class VideoPlayerValue {
 /// After [dispose] all further calls are ignored.
 class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   final BetterPlayerBufferingConfiguration bufferingConfiguration;
+  final BetterPlayerDataSource? dataSource;
 
   /// Constructs a [VideoPlayerController] and creates video controller on platform side.
   VideoPlayerController({
+    this.dataSource,
     this.bufferingConfiguration = const BetterPlayerBufferingConfiguration(),
     bool autoCreate = true,
   }) : super(VideoPlayerValue(duration: null)) {
@@ -204,6 +207,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   Future<void> _create() async {
     _textureId = await _videoPlayerPlatform.create(
       bufferingConfiguration: bufferingConfiguration,
+      dataSource: dataSource,
     );
     _creatingCompleter.complete(null);
 
@@ -587,9 +591,10 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   /// [width] specifies width of the selected track
   /// [height] specifies height of the selected track
   /// [bitrate] specifies bitrate of the selected track
-  Future<void> setTrackParameters(int? width, int? height, int? bitrate) async {
+  Future<void> setTrackParameters(
+      int? width, int? height, int? bitrate, int? trackId) async {
     await _videoPlayerPlatform.setTrackParameters(
-        _textureId, width, height, bitrate);
+        _textureId, width, height, bitrate, trackId);
   }
 
   Future<void> enablePictureInPicture(

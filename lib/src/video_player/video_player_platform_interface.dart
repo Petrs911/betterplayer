@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:ui';
 
 // Flutter imports:
+import 'package:better_player/better_player.dart';
 import 'package:better_player/src/configuration/better_player_buffering_configuration.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -72,7 +73,8 @@ abstract class VideoPlayerPlatform {
 
   /// Creates an instance of a video player and returns its textureId.
   Future<int?> create(
-      {BetterPlayerBufferingConfiguration? bufferingConfiguration}) {
+      {BetterPlayerBufferingConfiguration? bufferingConfiguration,
+      BetterPlayerDataSource? dataSource}) {
     throw UnimplementedError('create() has not been implemented.');
   }
 
@@ -123,7 +125,7 @@ abstract class VideoPlayerPlatform {
 
   /// Sets the video track parameters (used to select quality of the video)
   Future<void> setTrackParameters(
-      int? textureId, int? width, int? height, int? bitrate) {
+      int? textureId, int? width, int? height, int? bitrate, int? trackId) {
     throw UnimplementedError('setTrackParameters() has not been implemented.');
   }
 

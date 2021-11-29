@@ -4,6 +4,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:better_player/src/configuration/better_player_buffering_configuration.dart';
+import 'package:better_player/src/configuration/better_player_data_source.dart';
 import 'package:better_player/src/core/better_player_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +31,7 @@ class MethodChannelVideoPlayer extends VideoPlayerPlatform {
   @override
   Future<int?> create({
     BetterPlayerBufferingConfiguration? bufferingConfiguration,
+    BetterPlayerDataSource? dataSource,
   }) async {
     late final Map<String, dynamic>? response;
     if (bufferingConfiguration == null) {
@@ -177,7 +179,7 @@ class MethodChannelVideoPlayer extends VideoPlayerPlatform {
 
   @override
   Future<void> setTrackParameters(
-      int? textureId, int? width, int? height, int? bitrate) {
+      int? textureId, int? width, int? height, int? bitrate, int? trackId) {
     return _channel.invokeMethod<void>(
       'setTrackParameters',
       <String, dynamic>{
