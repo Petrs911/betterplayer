@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:better_player/better_player.dart';
 import 'package:better_player/src/core/better_player_utils.dart';
 import 'package:better_player/src/subtitles/better_player_subtitles_source.dart';
@@ -45,19 +45,17 @@ class BetterPlayerSubtitlesFactory {
   static Future<List<BetterPlayerSubtitle>> _parseSubtitlesFromNetwork(
       BetterPlayerSubtitlesSource source) async {
     try {
-      final client = HttpClient();
+      final Dio client = Dio();
       final List<BetterPlayerSubtitle> subtitles = [];
       for (final String? url in source.urls!) {
-        final request = await client.getUrl(Uri.parse(url!));
+        final request = await client.get<String>(url!);
         source.headers?.keys.forEach((key) {
           final value = source.headers![key];
           if (value != null) {
             request.headers.add(key, value);
           }
         });
-        final response = await request.close();
-        final data = await response.transform(const Utf8Decoder()).join();
-        final cacheList = _parseString(data);
+        final cacheList = _parseString(request.data ?? '');
         subtitles.addAll(cacheList);
       }
       client.close();
