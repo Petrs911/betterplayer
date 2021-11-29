@@ -39,13 +39,21 @@ class BetterPlayerHlsUtils {
       String data, String masterPlaylistUrl) async {
     final List<BetterPlayerAsmsTrack> tracks = [];
     try {
+      int trackId = 0;
       final parsedPlaylist = await HlsPlaylistParser.create()
           .parseString(Uri.parse(masterPlaylistUrl), data);
       if (parsedPlaylist is HlsMasterPlaylist) {
         parsedPlaylist.variants.forEach(
           (variant) {
-            tracks.add(BetterPlayerAsmsTrack('', variant.format.width,
-                variant.format.height, variant.format.bitrate, 0, '', ''));
+            tracks.add(BetterPlayerAsmsTrack(
+                trackId.toString(),
+                variant.format.width,
+                variant.format.height,
+                variant.format.bitrate,
+                0,
+                '',
+                ''));
+            trackId++;
           },
         );
       }
