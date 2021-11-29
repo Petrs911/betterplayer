@@ -8,6 +8,7 @@ import 'package:better_player/src/core/better_player_utils.dart';
 import 'package:better_player/src/video_player/video_player.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 ///Base class for both material and cupertino controls
@@ -234,7 +235,7 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget>
         betterPlayerController!.betterPlayerSubtitlesSource;
     final bool isSelected = (subtitlesSource == selectedSourceType) ||
         (subtitlesSource.type == BetterPlayerSubtitlesSourceType.none &&
-            subtitlesSource.type == selectedSourceType!.type);
+            subtitlesSource.type == selectedSourceType?.type);
 
     return BetterPlayerMaterialClickableWidget(
       onTap: () {
@@ -448,9 +449,13 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget>
   }
 
   void _showModalBottomSheet(List<Widget> children) {
-    Platform.isAndroid
-        ? _showMaterialBottomSheet(children)
-        : _showCupertinoModalBottomSheet(children);
+    if (kIsWeb) {
+      _showMaterialBottomSheet(children);
+    } else {
+      Platform.isAndroid
+          ? _showMaterialBottomSheet(children)
+          : _showCupertinoModalBottomSheet(children);
+    }
   }
 
   void _showCupertinoModalBottomSheet(List<Widget> children) {

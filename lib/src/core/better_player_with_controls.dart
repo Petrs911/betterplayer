@@ -10,6 +10,7 @@ import 'package:better_player/src/core/better_player_utils.dart';
 import 'package:better_player/src/subtitles/better_player_subtitles_configuration.dart';
 import 'package:better_player/src/subtitles/better_player_subtitles_drawer.dart';
 import 'package:better_player/src/video_player/video_player.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class BetterPlayerWithControls extends StatefulWidget {
@@ -166,8 +167,11 @@ class _BetterPlayerWithControlsState extends State<BetterPlayerWithControls> {
   ) {
     if (controlsConfiguration.showControls) {
       BetterPlayerTheme? playerTheme = controlsConfiguration.playerTheme;
+
       if (playerTheme == null) {
-        if (Platform.isAndroid) {
+        if (kIsWeb) {
+          playerTheme = BetterPlayerTheme.material;
+        } else if (Platform.isAndroid) {
           playerTheme = BetterPlayerTheme.material;
         } else {
           playerTheme = BetterPlayerTheme.cupertino;
